@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { SidebarMenu } from './sidebar/sidebar.component';
 
 @Component({
   selector: 'scm-root',
@@ -7,5 +6,4 @@ import { SidebarMenu } from './sidebar/sidebar.component';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  currentMenu: SidebarMenu;
 }
