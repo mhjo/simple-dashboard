@@ -39,4 +39,4 @@ testem.log
 Thumbs.db
 
 # environment variables
-config.js
+config.ts
