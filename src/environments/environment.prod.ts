@@ -1,11 +1,13 @@
+import * as config from '../../config';
+
 export const environment = {
   production: true,
   firebase: {
-    apiKey: 'AIzaSyASwA6bNPtwlfoGA-OlusHu1SJkCBHstaU',
-    authDomain: 'dev-seanjo.firebaseapp.com',
-    databaseURL: 'https://dev-seanjo.firebaseio.com',
-    projectId: 'dev-seanjo',
-    storageBucket: 'dev-seanjo.appspot.com',
-    messagingSenderId: '855749888034'
+    apiKey: config.firebase.apiKey,
+    authDomain: config.firebase.authDomain,
+    databaseURL: config.firebase.databaseURL,
+    projectId: config.firebase.projectId,
+    storageBucket: config.firebase.storageBucket,
+    messagingSenderId: config.firebase.messagingSenderId
   }
 };

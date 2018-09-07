@@ -5,10 +5,13 @@
       routerLink="/product-list/product/0" [queryParams]="{action: 'create'}" >
       <i class="fa fa-plus"></i>상품 등록
     </button>
+
     <form action="" class="form-inline">
       <input type="text" class="form-control mr-2" placeholder="상품 번호" #searchInput>
       <button class="btn btn-warning" type="button"
         (click)="searchProduct(searchInput.value)">상품 조회</button>
     </form>
+
+    <button class="btn btn-warning ml-2" (click)="checkSession()">{{ sessionBtnName }}</button>
   </div>
 </nav>
