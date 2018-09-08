@@ -6,8 +6,10 @@ import { ScmMainModule } from './scm-main/scm-main.module';
 import { ProductModule } from './product/product.module';
 import { CategoryModule } from './category/category.module';
 import { AppRoutingModule } from './app-routing.module';
-import { AngularFireModule } from 'angularfire2';
-import { AngularFireAuthModule } from 'angularfire2/auth';
+import { SharedModule } from './shared/shared.module';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -17,13 +19,15 @@ import { environment } from '../environments/environment';
   imports: [
     /* Angular Modules */
     BrowserModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFireDatabaseModule,
     /* App Modules */
     ScmMainModule,
     ProductModule,
     CategoryModule,
     AppRoutingModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule
+    SharedModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

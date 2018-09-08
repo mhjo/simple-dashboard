@@ -1,7 +1,8 @@
 import * as format from 'date-fns/format';
 
-export class ScmSharedUtil {
+export declare type ScmDomain = 'product' | 'category';
 
+export class ScmSharedUtil {
   static getCurrentDate() {
     return format(new Date(), 'YYYY-MM-DD');
   }

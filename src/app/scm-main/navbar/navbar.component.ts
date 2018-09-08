@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import * as firebase from 'firebase';
@@ -27,7 +27,7 @@ export class NavbarComponent implements OnInit {
   checkSession() {
     this.session$.pipe(
       take(1)
-    ).subscribe(s => s ? this.afAuth.auth.signOut() : this.afAuth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()));
+    ).subscribe(s => s ? this.afAuth.auth.signOut() : this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()));
   }
 
   searchProduct(no: number) {
