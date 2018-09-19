@@ -24,6 +24,10 @@ export class DataStoreService {
     return this.findObject$(domain, model.no).update(model);
   }
 
+  count(domain: ScmDomain) {
+    return this.counter.get(domain);
+  }
+
   findObject$(domain: ScmDomain, no: number) {
     return this._findObject(domain, no, false);
   }
