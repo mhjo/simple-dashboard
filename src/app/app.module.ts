@@ -1,6 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { environment } from '../environments/environment';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { ScmMainModule } from './scm-main/scm-main.module';
 import { ProductModule } from './product/product.module';
@@ -10,7 +11,8 @@ import { SharedModule } from './shared/shared.module';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { environment } from '../environments/environment';
+import { ToastrModule } from 'ngx-toastr';
+// import { CustomToastOptions } from './custom-toast-options';
 
 @NgModule({
   declarations: [
@@ -19,17 +21,21 @@ import { environment } from '../environments/environment';
   imports: [
     /* Angular Modules */
     BrowserModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule,
-    AngularFireDatabaseModule,
+    BrowserAnimationsModule,
     /* App Modules */
     ScmMainModule,
     ProductModule,
     CategoryModule,
     AppRoutingModule,
     SharedModule,
+    /* 3rd Module */
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFireDatabaseModule,
+    ToastrModule.forRoot(),
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
