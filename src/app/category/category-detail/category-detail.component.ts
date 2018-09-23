@@ -5,7 +5,7 @@ import { DataStoreService } from '../../shared/data-store.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActionMode, ScmSharedUtil } from 'src/app/shared/scm-shared-util';
 import { Category } from '../category.model';
-import { filter } from 'rxjs/operators';
+import { filter, tap, switchMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'scm-category-detail',
@@ -38,12 +38,6 @@ export class CategoryDetailComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.route.queryParamMap.pipe(
-      filter(q => q['action'] !== undefined)
-    );
-  }
-
   resetForm(cat: Category) {
     this.categoryForm.reset({
       no: {value: cat.no, disabled: true},
@@ -55,4 +49,68 @@ export class CategoryDetailComponent implements OnInit {
     });
   }
 
+  ngOnInit() {
+    this.route.queryParamMap.pipe(
+      filter(q => q['action'] !== undefined),
+      tap(q => this._setActionMode(q)),
+
+      switchMap(q => this.route.data),
+      filter((data: { category: Category }) => data.category !== null),
+      map((data: { category: Category }) => data.category)
+    ).subscribe(cat => this.actionMode === 'read' ? this.resetForm(cat) : this.categoryForm.patchValue(cat));
+  }
+
+  submit() {
+    const category: Category = this.categoryForm.value;
+
+    if (this.actionMode === 'create') {
+      const categoryFn = (no) => {
+        category.no = no;
+        return category;
+      };
+      this.database.create('category', categoryFn).subscribe(
+        this._onSuccess(), this._onError()
+      );
+      return;
+    }
+    category.updatedTime = ScmSharedUtil.getCurrentDateTime();
+    this.database.update('category', category).then(this._onSuccess(), this._onError());
+  }
+
+  cancel() {
+    this.redirectToCategoryList();
+  }
+
+  private redirectToCategoryList() {
+    this.router.navigate(['category-list']);
+  }
+
+  private _setActionMode(q) {
+    this.actionMode = q['action'];
+    switch (this.actionMode) {
+      case 'create':
+        this.subTitle = '등록';
+        break;
+      case 'edit':
+        this.subTitle = '수정';
+        break;
+      case 'read':
+      default:
+        this.subTitle = '조회';
+    }
+  }
+
+  private _onSuccess() {
+    return () => {
+      this.toastr.success(`카테고리 ${this.subTitle} 완료`, '[카테고리 관리]');
+      this.redirectToCategoryList();
+    };
+  }
+
+  private _onError() {
+    return e => {
+      this.toastr.error(`카테고리 ${this.subTitle} 실패`, '[카테고리 관리]');
+      this.redirectToCategoryList();
+    };
+  }
 }
