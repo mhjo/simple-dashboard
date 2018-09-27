@@ -12,6 +12,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { ToastrModule } from 'ngx-toastr';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 // import { CustomToastOptions } from './custom-toast-options';
 
 @NgModule({
@@ -33,6 +34,7 @@ import { ToastrModule } from 'ngx-toastr';
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     ToastrModule.forRoot(),
+    NgbPaginationModule.forRoot(),
   ],
   providers: [
   ],

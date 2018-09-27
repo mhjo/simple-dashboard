@@ -11,7 +11,7 @@ export class NoCounterService {
 
   constructor(private db: AngularFireDatabase) { }
 
-  get(domain: ScmDomain): Observable<object> {
+  get(domain: ScmDomain): Observable<any> {
     return this._getNumber$(domain).snapshotChanges().pipe(
       map(action => action.payload.val() || 0)
     );
