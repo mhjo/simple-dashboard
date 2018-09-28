@@ -31,8 +31,43 @@ export class ProductManagementComponent implements OnInit {
     this.setBtnClickHandler();
   }
 
+  pageNoChanged(pageNo) {
+    this.pageNo = pageNo;
+    this.productListComponent.pageNoChanged(this.pageNo);
+  }
+
+  pageSizeChanged(pageSize) {
+    this.pageSize = +pageSize;
+    this.productListComponent.pageSizeChanged(this.pageSize);
+  }
+
+  clickedBtn(btnEvent: string) {
+    this.clickedHandler[btnEvent]();
+  }
+
   private setBtnClickHandler() {
-    const clickedSell = () => {};
+    const clickedSell = () => {
+      this.productBulkUpdater.updateProductsToSell().subscribe((successIds) => {
+        this.productListComponent.getPagedList();
+        this.toastr.success(`상품 판매 변경 성공<br>ID: ${successIds.join(', ')}`, `[상품관리]`, {enableHtml: true});
+      }, (e: Error) => {
+        this.toastr.error(`상품 판매 변경 실패<br>ID: ${e.message}`, '[상품관리]', {enableHtml: true});
+      });
+    };
+
+    const clickedStop = () => {
+      this.productBulkUpdater.updateProductsToStop().subscribe((successIds) => {
+        this.productListComponent.getPagedList();
+        this.toastr.success(`상품 판매중지 변경 성공<br>ID: ${successIds.join(', ')}`, `[상품관리]`, {enableHtml: true});
+      }, (e: Error) => {
+        this.toastr.error(`상품 판매중지 변경 실패<br>ID: ${e.message}`, '[상품관리]', {enableHtml: true});
+      });
+    };
+
+    this.clickedHandler = {
+      sell: clickedSell,
+      stop: clickedStop
+    };
   }
 
 }

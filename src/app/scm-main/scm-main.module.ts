@@ -6,6 +6,7 @@ import { FooterComponent } from './footer/footer.component';
 import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RouterModule } from '@angular/router';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
 
 const CORE_COMPONENTS = [NavbarComponent, SidebarComponent, FooterComponent, MainDashboardComponent, PageNotFoundComponent];
 
@@ -13,7 +14,8 @@ const CORE_COMPONENTS = [NavbarComponent, SidebarComponent, FooterComponent, Mai
   declarations: CORE_COMPONENTS,
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    ChartsModule,
   ],
   exports: CORE_COMPONENTS
 })

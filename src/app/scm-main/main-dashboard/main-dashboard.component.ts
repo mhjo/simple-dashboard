@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { DataStoreService } from '../../shared/data-store.service';
+import { ProdStatus } from '../../product/product.model';
+import { map, tap } from 'rxjs/operators';
+import { zip } from 'rxjs';
 
 @Component({
   selector: 'scm-main-dashboard',
@@ -6,10 +10,65 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main-dashboard.component.css']
 })
 export class MainDashboardComponent implements OnInit {
+  fetchBarChartData = false;
+  barData: any[];
+  barChartLabels = ['판매 대기', '판매 중', '판매중지'];
+  barChartOptions;
 
-  constructor() { }
+  fetchPieChartData = false;
+  pieData: number[];
+  pieChartLabels: string[];
 
-  ngOnInit() {
+  constructor(
+    private database: DataStoreService,
+  ) {
+    this.barData = [];
+    this.pieData = [];
+    this.pieChartLabels = [];
   }
 
+  ngOnInit() {
+    this.makeBarChart();
+    this.makePieChart();
+  }
+
+  private makeBarChart() {
+    const waitForSale$ = this.database.findLists$ByQuery('product', 'status', ProdStatus.WAIT_FOR_SALE).snapshotChanges().pipe(
+      map(r => r.length)
+    );
+    const onSale$ = this.database.findLists$ByQuery('product', 'status', ProdStatus.ON_SALE).snapshotChanges().pipe(
+      map(r => r.length)
+    );
+    const notForSale$ = this.database.findLists$ByQuery('product', 'status', ProdStatus.NOT_FOR_SALE).snapshotChanges().pipe(
+      map(r => r.length)
+    );
+
+    zip(waitForSale$, onSale$, notForSale$).pipe(
+      tap(statData => this.makeBarChartDataset(statData)),
+      tap(statData => this.makeBarChartOptions(statData)),
+    ).subscribe(() => {
+      this.fetchBarChartData = true;
+    });
+  }
+
+  private makeBarChartDataset(statData: number[]) {
+    this.barData.push({ data: [statData[0]], label: this.barChartLabels[0] });
+    this.barData.push({ data: [statData[1]], label: this.barChartLabels[1] });
+    this.barData.push({ data: [statData[2]], label: this.barChartLabels[2] });
+  }
+
+  private makeBarChartOptions(statData: number[]) {
+    const maxNum = statData.reduce(function(a, b) {
+      return Math.max(a, b);
+    });
+    this.barChartOptions = {
+      scales: {
+        xAxes: [{ ticks: {max: maxNum, min: 0, stepSize: 1} }]
+      }
+    };
+  }
+
+  private makePieChart() {
+    //
+  }
 }

@@ -1,3 +1,22 @@
-<p>
-  product-detail works!
-</p>
+<h4>상품 {{subTitle}}</h4>
+<form (ngSubmit)="submit()" [formGroup]="productForm" novalidate>
+  <div class="container-fluid p-2 rounded">
+    <div class="row my-4">
+      <div class="col-12">
+        <div class="input-group">
+          <span class="input-group-addon">상품 번호</span>
+          <input type="text" class="form-control" formControlName="no" readonly>
+        </div>
+      </div>
+    </div>
+
+    <div class="row my-4">
+      <div class="col-12">
+        <div class="input-group">
+          <span class="input-group-addon">상품명</span>
+          <input type="text" class="form-control" formControlName="name">
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
