@@ -3,6 +3,7 @@ import { DataStoreService } from '../../shared/data-store.service';
 import { ProdStatus } from '../../product/product.model';
 import { map, tap } from 'rxjs/operators';
 import { zip } from 'rxjs';
+import { SpinnerService } from '../../shared/loading-spinner/spinner.service';
 
 @Component({
   selector: 'scm-main-dashboard',
@@ -21,6 +22,7 @@ export class MainDashboardComponent implements OnInit {
 
   constructor(
     private database: DataStoreService,
+    private spinner: SpinnerService,
   ) {
     this.barData = [];
     this.pieData = [];
@@ -33,6 +35,8 @@ export class MainDashboardComponent implements OnInit {
   }
 
   private makeBarChart() {
+    this.spinner.start();
+
     const waitForSale$ = this.database.findLists$ByQuery('product', 'status', ProdStatus.WAIT_FOR_SALE).snapshotChanges().pipe(
       map(r => r.length)
     );
@@ -47,6 +51,7 @@ export class MainDashboardComponent implements OnInit {
       tap(statData => this.makeBarChartDataset(statData)),
       tap(statData => this.makeBarChartOptions(statData)),
     ).subscribe(() => {
+      this.spinner.stop();
       this.fetchBarChartData = true;
     });
   }

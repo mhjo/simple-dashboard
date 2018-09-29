@@ -4,18 +4,20 @@ import { ProductManagementComponent } from './product-management/product-managem
 import { ProductListResolverService } from './product-management/product-list/product-list-resolver.service';
 import { ProductDetailResolverService } from './product-detail/product-detail-resolver.service';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { CanDeactivateGuardService } from '../shared/can-deactivate-guard.service';
 
 const routes: Routes = [
   { path: 'product-list', children: [
     {
       path: '',
       pathMatch: 'full',
-      // resolve: {list: ProductListResolverService},
+      resolve: {list: ProductListResolverService},
       component: ProductManagementComponent
     },
     {
       path: 'product/:no',
-      // resolve: {detail: ProductDetailResolverService},
+      resolve: {detail: ProductDetailResolverService},
+      canDeactivate: [CanDeactivateGuardService],
       component: ProductDetailComponent
     }
   ] },

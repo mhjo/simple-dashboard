@@ -6,16 +6,18 @@ import { ToastrService } from 'ngx-toastr';
 import { ActionMode, ScmSharedUtil } from 'src/app/shared/scm-shared-util';
 import { Category } from '../category.model';
 import { filter, tap, switchMap, map } from 'rxjs/operators';
+import { CanComponentDeactivate } from '../../shared/can-deactivate-guard.service';
 
 @Component({
   selector: 'scm-category-detail',
   templateUrl: './category-detail.component.html',
   styleUrls: ['./category-detail.component.css']
 })
-export class CategoryDetailComponent implements OnInit {
+export class CategoryDetailComponent implements OnInit, CanComponentDeactivate {
   subTitle: string;
   actionMode: ActionMode;
   categoryForm: FormGroup;
+  private submitted = false;
 
   constructor(
     private router: Router,
@@ -50,14 +52,18 @@ export class CategoryDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParamMap.pipe(
+    this.route.queryParams.pipe(
       filter(q => q['action'] !== undefined),
       tap(q => this._setActionMode(q)),
-
       switchMap(q => this.route.data),
       filter((data: { category: Category }) => data.category !== null),
       map((data: { category: Category }) => data.category)
     ).subscribe(cat => this.actionMode === 'read' ? this.resetForm(cat) : this.categoryForm.patchValue(cat));
+  }
+
+  canDeactivate() {
+    if (this.submitted || this.categoryForm.pristine) { return true; }
+    return confirm('저장하지 않고 돌아가면 수정사항이 반영되지 않습니다.');
   }
 
   submit() {
@@ -103,6 +109,7 @@ export class CategoryDetailComponent implements OnInit {
   private _onSuccess() {
     return () => {
       this.toastr.success(`카테고리 ${this.subTitle} 완료`, '[카테고리 관리]');
+      this.submitted = true;
       this.redirectToCategoryList();
     };
   }

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -13,6 +14,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { ToastrModule } from 'ngx-toastr';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
 // import { CustomToastOptions } from './custom-toast-options';
 
 @NgModule({
@@ -22,6 +24,8 @@ import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [
     /* Angular Modules */
     BrowserModule,
+    FormsModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     /* App Modules */
     ScmMainModule,

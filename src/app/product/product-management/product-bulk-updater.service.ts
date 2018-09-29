@@ -50,7 +50,7 @@ export class ProductBulkUpdaterService {
 
   private handleBulkUpdate$(update$: Observable<any>) {
     return update$.pipe(
-      reduce((acc, r: UpdateResult) => {
+      reduce((acc, r) => {
         console.log(r[0]);
         if (r[0]) {
           acc.success.push(r[1]);

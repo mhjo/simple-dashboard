@@ -4,6 +4,8 @@ import { CategoryManagementComponent } from './category-management/category-mana
 import { CategoryDetailResolverService } from './category-detail/category-detail-resolver.service';
 import { CategoryDetailComponent } from './category-detail/category-detail.component';
 import { CategoryListResolverService } from './category-management/category-list-resolver.service';
+import { CanDeactivateGuardService } from '../shared/can-deactivate-guard.service';
+import { SessionAuthGuardService } from '../shared/session-auth-guard.service';
 
 const routes: Routes = [
   { path: 'category-list', children: [
@@ -15,7 +17,9 @@ const routes: Routes = [
     },
     {
       path: 'category/:no',
+      canActivate: [SessionAuthGuardService],
       resolve: {category: CategoryDetailResolverService},
+      canDeactivate: [CanDeactivateGuardService],
       component: CategoryDetailComponent
     }
   ]}
