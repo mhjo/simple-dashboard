@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DataStoreService } from '../../shared/data-store.service';
 import { ProdStatus } from '../../product/product.model';
-import { map, tap } from 'rxjs/operators';
-import { zip } from 'rxjs';
+import { map, tap, take, mergeMap, filter } from 'rxjs/operators';
+import { zip, from } from 'rxjs';
 import { SpinnerService } from '../../shared/loading-spinner/spinner.service';
+import { Category } from '../../category/category.model';
 
 @Component({
   selector: 'scm-main-dashboard',
@@ -74,6 +75,23 @@ export class MainDashboardComponent implements OnInit {
   }
 
   private makePieChart() {
-    //
+    this.spinner.start();
+
+    this.database.findLists$<Category>('category').snapshotChanges().pipe(
+      take(1),
+      mergeMap(actions => from(actions).pipe(map(action => action.payload.val()))),
+      filter(cat => cat.isUse),
+      mergeMap(cat => this.database.findLists$ByQuery('product', 'catNo', cat.no.toString()).snapshotChanges().pipe(
+        take(1),
+        map(products => [cat, products.length])
+      )),
+      tap(result => {
+        this.pieData.push(result[1]);
+        this.pieChartLabels.push(result[0].name);
+      })
+    ).subscribe(null, null, () => {
+      this.spinner.stop();
+      this.fetchPieChartData = true;
+    });
   }
 }
