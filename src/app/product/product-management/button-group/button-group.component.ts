@@ -24,7 +24,7 @@ export class ButtonGroupComponent implements OnInit {
 
   private mapNoneKeyObservable() {
     this.noneNo$ = this.prodSet.hasNo$.pipe(
-      map(hasNo => hasNo),
+      map(hasNo => !hasNo),
     );
   }
 }

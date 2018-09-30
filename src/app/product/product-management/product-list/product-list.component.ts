@@ -13,8 +13,8 @@ import { map, tap } from 'rxjs/operators';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit, OnDestroy {
-  @Input() totalItemCnt: number = 0;
-  pageNo: number = 1;
+  @Input() totalItemCnt = 0;
+  pageNo = 1;
   pageSize: number;
   products: Products;
   checkedStatus: boolean[];

@@ -85,7 +85,8 @@ export class MainDashboardComponent implements OnInit {
         take(1),
         map(products => [cat, products.length])
       )),
-      tap(result => {
+      tap((result: any) => {
+        console.log(result);
         this.pieData.push(result[1]);
         this.pieChartLabels.push(result[0].name);
       })
